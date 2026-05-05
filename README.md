@@ -39,3 +39,5 @@ A couple of ideas to expand TweenComposer in the future:
 - Preview on editor (great for working on the animation without having to run it every time!)
 - Implement tween_callback() and tween_method(), somehow.
 - Using variables as property values, to make dynamic animations.
+
+Head to the itch.io page for more updates: https://gurbsgurbs.itch.io/tween-composer
