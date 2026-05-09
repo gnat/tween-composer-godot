@@ -15,7 +15,6 @@ extends Node
 ##
 ## TODO: Preview in editor: Now that reset_tween is done, this should be doable.
 ## TODO: Improvement?: set_loops() is said to be buggy (or at least less sync-reliable). Investigate further.
-## TBD: Idea: Load TweenConfig? Would allow the user to have a single TweenComposer and change animations.
 ## BUG: Known issue: Parallel and delayed tween property if it is a relative as well (currently throws an error to warn the user)
 ## 
 
@@ -53,7 +52,8 @@ signal trigger_fired(trigger_name)
 @export var loop_repetitions: int = 0
 
 ## Tween information is usually deleted after the tween is finished.
-## Set this to true if you intend to play this tween again after it stops.
+## Set this to [code]true[/code] if you intend to play this tween again after it stops.
+## If set to [code]false[/code], the tween will need to be composed again before running.
 @export var persist_tween_information: bool = false
 
 @export_subgroup("Parent settings")
@@ -94,7 +94,7 @@ func _ready() -> void:
 	if hide_parent_before_tween_start:
 		_hide_parent()
 	
-	# Start the tween loop
+	# Compose the tween loop
 	if tween_configuration != null:
 		_compose_tween()
 		if autostart:
@@ -103,6 +103,8 @@ func _ready() -> void:
 			_show_parent()
 			play_tween()
 
+
+#region Compose / Load Tween Collections
 
 func _compose_tween() -> void:
 	
@@ -226,6 +228,8 @@ func load_tween_and_start(config:TweenConfigCollection) -> void:
 	tween_configuration = config
 	_compose_tween()
 	play_tween()
+
+#endregion
 
 
 #region Tween playback controls
