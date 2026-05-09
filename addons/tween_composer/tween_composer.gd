@@ -95,22 +95,18 @@ func _ready() -> void:
 		_hide_parent()
 	
 	# Start the tween loop
-	_compose_tween()
-	if autostart:
-		if autostart_delay > 0.0:
-			await get_tree().create_timer(autostart_delay).timeout
-		_show_parent()
-		play_tween()
+	if tween_configuration != null:
+		_compose_tween()
+		if autostart:
+			if autostart_delay > 0.0:
+				await get_tree().create_timer(autostart_delay).timeout
+			_show_parent()
+			play_tween()
 
 
 func _compose_tween() -> void:
-	# Safety checks and warnings
-	if tween_configuration == null:
-		push_error(str(parent_object.name) + ": TweenComposer must have a TweenConfigCollection file!")
-		return
-	elif tween_configuration.tween_collection.size() == 0:
-		push_error(str(parent_object.name) + ": " + str(tween_configuration.resource_name) + "Configuration is empty (no tween steps set)!")
-		return
+	
+	_is_tween_config_valid()
 	
 	var tween_steps = tween_configuration.tween_collection
 
@@ -287,6 +283,17 @@ func _is_tween_valid() -> bool:
 	else:
 		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
+
+func _is_tween_config_valid() -> bool:
+	# Safety checks and warnings
+	if tween_configuration == null:
+		push_error(str(parent_object.name) + ": TweenComposer must have a TweenConfigCollection file!")
+		return false
+	elif tween_configuration.tween_collection.size() == 0:
+		push_error(str(parent_object.name) + ": " + str(tween_configuration.resource_name) + "Configuration is empty (no tween steps set)!")
+		return false
+	else:
+		return true
 
 
 func _hide_parent() -> void:
