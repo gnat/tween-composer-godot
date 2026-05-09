@@ -95,7 +95,7 @@ func _ready() -> void:
 		_hide_parent()
 	
 	# Start the tween loop
-	compose_tween()
+	_compose_tween()
 	if autostart:
 		if autostart_delay > 0.0:
 			await get_tree().create_timer(autostart_delay).timeout
@@ -103,13 +103,13 @@ func _ready() -> void:
 		play_tween()
 
 
-func compose_tween() -> void:
+func _compose_tween() -> void:
 	# Safety checks and warnings
 	if tween_configuration == null:
-		push_error("TweenComposer must have a TweenConfigCollection file!")
+		push_error(str(parent_object.name) + ": TweenComposer must have a TweenConfigCollection file!")
 		return
 	elif tween_configuration.tween_collection.size() == 0:
-		push_error(tween_configuration.resource_name + "Configuration is empty (no tween steps set)!")
+		push_error(str(parent_object.name) + ": " + str(tween_configuration.resource_name) + "Configuration is empty (no tween steps set)!")
 		return
 	
 	var tween_steps = tween_configuration.tween_collection
@@ -192,7 +192,7 @@ func compose_tween() -> void:
 			if tw_step.tween_property == tw_step.TweenOptions.ROTATION:
 				target_value_formatted = target_value_formatted.x
 			# Transform  Vector3 to Vector2 if 2D
-			elif tw_step.tween_property == tw_step.TweenOptions.POSITION or tw_step.tween_property == tw_step.TweenOptions.SCALE and target_value_formatted is Vector3: 
+			elif tw_step.tween_property == tw_step.TweenOptions.POSITION or tw_step.tween_property == tw_step.TweenOptions.SCALE and target_value_formatted is Vector3:
 				target_value_formatted = Vector2(target_value_formatted.x, target_value_formatted.y)
 		
 		
@@ -219,6 +219,19 @@ func compose_tween() -> void:
 	tween.stop()
 
 
+func load_tween(config:TweenConfigCollection) -> void:
+	reset_tween()
+	tween_configuration = config
+	_compose_tween()
+
+
+func load_tween_and_start(config:TweenConfigCollection) -> void:
+	reset_tween()
+	tween_configuration = config
+	_compose_tween()
+	play_tween()
+
+
 #region Tween playback controls
 
 ## Stops the tween. Using [method play_tween] will start the animation again, from its current state.
@@ -240,12 +253,13 @@ func play_tween() -> void:
 	if _is_tween_valid():
 		tween.play()
 
+
 ## Resets the parent object's properties to their original state. Stops the tween.
 func reset_tween() -> void:
 	stop_tween()
 	for path in _initial_values:
 		parent_object.set_indexed(path, _initial_values[path])
-	pass
+
 
 ## Resets the parent object's properties to their original state. Plays the tween.
 func restart_tween() -> void:
@@ -253,7 +267,7 @@ func restart_tween() -> void:
 	play_tween()
 
 
-## Kills the tween. Not expected to be used externally.
+## Kills the tween. Not expected to be used.
 func _kill_tween() -> void:
 	if _is_tween_valid():
 		tween.kill()
@@ -265,32 +279,41 @@ func _kill_tween() -> void:
 
 ## Checks if the tween in the TweenComposer is valid. Returns a warning if false.
 func _is_tween_valid() -> bool:
-	if tween.is_valid():
+	if tween == null:
+		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
+		return false
+	elif tween.is_valid():
 		return true
 	else:
 		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
 
+
 func _hide_parent() -> void:
+	# INFO: Toggling "visible" in Control nodes can mess with the UI position, so the solution was to "turn invisible" instead.
 	if parent_object is Control:
-				parent_object.modulate = Color(1.0, 1.0, 1.0, 0.0)
+		parent_object.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	else:
 		parent_object.hide()
 
+
 func _show_parent() -> void:
+	# INFO: Toggling "visible" in Control nodes can mess with the UI position, so the solution was to "turn invisible" instead.
 	if parent_object is Control:
 		parent_object.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	else:
 		parent_object.show()
 
+
 func _delete_parent_entity() -> void:
 	parent_object.set_process(false)
 	parent_object.queue_free()
 
-#endregion
 
 func _on_tween_finished() -> void:
 	if persist_tween_information:
 		tween.stop()
 	if delete_parent_after_tween_end:
 		_delete_parent_entity()
+
+#endregion
