@@ -210,7 +210,7 @@ func _compose_tween() -> void:
 				emit_signal.bind("trigger_fired", trigger)
 			)
 	
-	# Connects the method to the function
+	# Connects the tween finishing signal to the function
 	tween.connect("finished", _on_tween_finished)
 	
 	# Stops the tween, as this is just the compose_tween function!
