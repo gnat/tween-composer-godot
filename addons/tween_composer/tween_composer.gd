@@ -25,6 +25,37 @@ signal trigger_fired(trigger_name)
 ## The [TweenSequence] resource that will be used for composing each step of the tween.
 @export var tween_sequence: TweenSequence
 
+
+## Triggers the tween as it enters the scene.
+@export var autostart: bool = true
+
+## Adds a delay (in seconds) before the start of the tween.
+@export var autostart_delay: float = 0.0:
+	set(value):
+		autostart_delay = max(0.0, value) # Blocks negative numbers
+
+
+@export_group("Parent settings")
+
+## Sets if the parent entity will be hidden before the tween animatio begins. [br]
+## Useful if the tween has an intro animation (fade-in, scale from zero, etc.).
+@export var hide_parent_before_tween_start: bool = false
+
+## Sets if the parent entity will be removed when the tween is ends. [br]
+## The tween is considered "finished" after all loops have played (therefore if [loop_repetitions] 
+## is set to zero, the animation will never end.
+@export var delete_parent_after_tween_end:bool = false
+
+@export_group("Other settings")
+
+@export var ignore_time_scale: bool = false
+@export var set_pause_mode: Tween.TweenPauseMode = Tween.TweenPauseMode.TWEEN_PAUSE_BOUND
+
+## Sets which process will be used for the tween.
+## Use "Physics" if the tween requires frame-independent precision, better synchrony.
+@export_enum("Idle", "Physics") var process_callback: int = 0
+
+
 ## The reference for the entity that will be animated by [TweenComposer]
 var parent_object: Node
 
@@ -41,15 +72,15 @@ func _ready() -> void:
 	# Get parent
 	parent_object = get_parent()
 	
-	if tween_sequence.hide_parent_before_tween_start:
+	if hide_parent_before_tween_start:
 		_hide_parent()
 	
 	# Compose the tween loop
 	if tween_sequence.tween_steps != null:
 		_compose_tween()
-		if tween_sequence.autostart:
-			if tween_sequence.autostart_delay > 0.0:
-				await get_tree().create_timer(tween_sequence.autostart_delay).timeout
+		if autostart:
+			if autostart_delay > 0.0:
+				await get_tree().create_timer(autostart_delay).timeout
 			_show_parent()
 			play_tween()
 
@@ -94,13 +125,13 @@ func _compose_tween() -> void:
 	if tween_sequence.loop:
 		tween.set_loops(tween_sequence.loop_repetitions)
 	
-	if tween_sequence.process_callback == 1:
+	if process_callback == 1:
 		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	else:
 		tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	
-	tween.set_pause_mode(tween_sequence.set_pause_mode)
-	tween.set_ignore_time_scale(tween_sequence.ignore_time_scale)
+	tween.set_pause_mode(set_pause_mode)
+	tween.set_ignore_time_scale(ignore_time_scale)
 	
 	
 	# Creating the tweens by getting values from tween array.
