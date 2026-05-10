@@ -1,8 +1,7 @@
 @tool
-class_name TweenConfigStep
+class_name TweenStepItem
 extends Resource
-## TweenConfigStep is the resource that houses all the configuration of each tween instruction 
-## for the Tween Composer to work on the tween.
+## TweenStepItem is the resource that contains all the configuration of each tween step.
 
 #region Property options to be added to the inspector UI
 
@@ -21,7 +20,7 @@ const PROPERTY_RULES: Dictionary = {
 
 ## Sets the name of the tween step. [br]
 ## Not used in the code, but very useful for identifying steps in the inspector list, and for 
-##easier manipulation of the resource in the array.
+## easier manipulation of the resource in the array.
 @export var step_name: String = "Tween Step":
 	set(value):
 		step_name = value

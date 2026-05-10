@@ -3,21 +3,17 @@ class_name TweenComposer
 extends Node
 ## Attach this node to any other node to tween its properties it.
 ## It can be used in 2D, 3D and Control nodes. [br]
-## The Tweener uses a [TweenConfigCollection] resource to compose a tween and launch it. [br]
-## You can save your [TweenConfigCollection] to reuse it. [br]
-## [br]
-## TweenComposer features: [br]
-## * Dropdown for basic properties (position, rotation, scale, color/opacity). [br]
-## * An "Other" field for changing a custom property (or paths, like "position:x".  [br]
-## * Sending triggers as a signal so other nodes can be connected and interact with the tween. [br]
-## * "Hide before" and "Delete after" tweens. [br]
-## * Playback options to pause/play, reset, restart... [br]
+## TweenComposer uses a [TweenSequence] resource to compose its tweens. This resource contains variables [br]
+## to set the settings of the tween (like duration, loops, etc). And, more importantly, it houses another [br]
+## resource, [TweenStepCollection], that contains all instructions for each step of the tween. [br]
+## 
+## You can save both [TweenSequence] and [TweenStepCollection] to reuse it in different game objects, [br]
+## or to load different animations into the same one.
+## [br][br]
 ##
 ## TODO: Preview in editor: Now that reset_tween is done, this should be doable.
-## TODO: Improvement?: set_loops() is said to be buggy (or at least less sync-reliable). Investigate further.
 ## BUG: Known issue: Parallel and delayed tween property if it is a relative as well (currently throws an error to warn the user)
 ## 
-
 
 
 @warning_ignore("unused_signal")
@@ -26,59 +22,13 @@ signal trigger_fired(trigger_name)
 
 #region Variables
 
-## The [TweenConfigCollection] to use in the animation.
-@export var tween_configuration: TweenConfigCollection
+## The [TweenSequence] resource that will be used for composing each step of the tween.
+@export var tween_sequence: TweenSequence
 
-@export_group("Tween settings")
-
-## Total duration of tween, in seconds. [br]
-## Tip: Change the duration_ratio in each [TweenConfigStep] to adjust the time of their individual tween.
-@export var tween_duration: float = 1.0:
-	set(value):
-		tween_duration = max(0.0, value) # Blocks negative numbers
-
-## Triggers the tween as it enters the scene.
-@export var autostart: bool = true
-
-## Adds a delay (in seconds) before the start of the tween.
-@export var autostart_delay: float = 0.0:
-	set(value):
-		autostart_delay = max(0.0, value) # Blocks negative numbers
-
-## Sets if the tween will be looped, or one-shot.
-@export var loop: bool = true
-
-## How many times the tween will loop before it stops. Use zero for infinite.
-@export var loop_repetitions: int = 0
-
-## Tween information is usually deleted after the tween is finished.
-## Set this to [code]true[/code] if you intend to play this tween again after it stops.
-## If set to [code]false[/code], the tween will need to be composed again before running.
-@export var persist_tween_information: bool = false
-
-@export_subgroup("Parent settings")
-
-## Sets if the parent entity will be hidden before the tween animatio begins. [br]
-## Useful if the tween has an intro animation (fade-in, scale from zero, etc.).
-@export var hide_parent_before_tween_start: bool = false
-
-## Sets if the parent entity will be removed when the tween is ends. [br]
-## The tween is considered "finished" after all loops have played (therefore if [loop_repetitions] 
-## is set to zero, the animation will never end.
-@export var delete_parent_after_tween_end:bool = false
-
-
-@export_subgroup("Other settings")
-@export var ignore_time_scale: bool = false
-@export var set_pause_mode: Tween.TweenPauseMode = Tween.TweenPauseMode.TWEEN_PAUSE_BOUND
-
-## Sets which process will be used for the tween.
-## Use "Physics" if the tween requires frame-independent precision, better synchrony.
-@export_enum("Idle", "Physics") var process_callback: int = 0
-
-
+## The reference for the entity that will be animated by [TweenComposer]
 var parent_object: Node
 
+## The tween object that will be used by [TweenComposer].
 var tween: Tween
 
 ## A Dictionary that stores all the initial property values, to be restored if [method reset_tween] is called.
@@ -91,37 +41,37 @@ func _ready() -> void:
 	# Get parent
 	parent_object = get_parent()
 	
-	if hide_parent_before_tween_start:
+	if tween_sequence.hide_parent_before_tween_start:
 		_hide_parent()
 	
 	# Compose the tween loop
-	if tween_configuration != null:
+	if tween_sequence.tween_steps != null:
 		_compose_tween()
-		if autostart:
-			if autostart_delay > 0.0:
-				await get_tree().create_timer(autostart_delay).timeout
+		if tween_sequence.autostart:
+			if tween_sequence.autostart_delay > 0.0:
+				await get_tree().create_timer(tween_sequence.autostart_delay).timeout
 			_show_parent()
 			play_tween()
 
 
-#region Compose / Load Tween Collections
+#region Compose
 
 func _compose_tween() -> void:
 	
 	_is_tween_config_valid()
 	
-	var tween_steps = tween_configuration.tween_collection
+	var tw_steps = tween_sequence.tween_steps.step_collection
 
 	# Calculate the duration of tween(s)
 	
 	## The sum of all duration ratios of non-parallel steps. Used to calculate the different timing of each step in the tween animation.
 	var duration_ratio_total: float = 0.0
 		
-	for tw_step in tween_steps:
+	for tw_step in tw_steps:
 		
 		# Warning
 		if tw_step == null:
-			push_error(tween_configuration.resource_name + ": Collection contains empty steps.")
+			push_error(tween_sequence.tween_steps.resource_name + ": Collection contains empty steps.")
 			return
 		
 		if tw_step.parallel == false:
@@ -129,7 +79,7 @@ func _compose_tween() -> void:
 	
 	# Crash prevention if all steps are parallel (or all their ratios are 0)
 	if duration_ratio_total <= 0:
-		push_warning(tween_configuration.resource_name + ": Total duration ratio = 0. Using 1.0 to avoid division by zero. It's likely that all steps are set to parallel.")
+		push_warning(tween_sequence.tween_steps.resource_name + ": Total duration ratio = 0. Using 1.0 to avoid division by zero. It's likely that all steps are set to parallel.")
 		duration_ratio_total = 1.0
 	
 	
@@ -141,21 +91,21 @@ func _compose_tween() -> void:
 	# Initial setup of tween parameters
 	tween = create_tween()
 	
-	if loop:
-		tween.set_loops(loop_repetitions)
+	if tween_sequence.loop:
+		tween.set_loops(tween_sequence.loop_repetitions)
 	
-	if process_callback == 1:
+	if tween_sequence.process_callback == 1:
 		tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	else:
 		tween.set_process_mode(Tween.TWEEN_PROCESS_IDLE)
 	
-	tween.set_pause_mode(set_pause_mode)
-	tween.set_ignore_time_scale(ignore_time_scale)
+	tween.set_pause_mode(tween_sequence.set_pause_mode)
+	tween.set_ignore_time_scale(tween_sequence.ignore_time_scale)
 	
 	
 	# Creating the tweens by getting values from tween array.
 	# (The big FOR loop starts here)
-	for tw_step in tween_steps:
+	for tw_step in tw_steps:
 		
 		if !tw_step.active:
 			continue
@@ -166,10 +116,10 @@ func _compose_tween() -> void:
 		
 		# Warnings:
 		if parent_object is Node3D and tw_step.tween_property == tw_step.TweenOptions.MODULATE:
-			push_error(tween_configuration.resource_name + "Node3D does not support 'modulate'. Use 'Other' to target a material property.")
+			push_error(tween_sequence.tween_steps.resource_name + "Node3D does not support 'modulate'. Use 'Other' to target a material property.")
 			continue
 		elif (parent_object is CollisionObject2D or parent_object is CollisionObject3D) and tw_step.tween_property == tw_step.TweenOptions.SCALE:
-			push_error(tween_configuration.resource_name + "Changes to the Scale property in PhysicsBody objects may lead to unexpected results or even be overridden")
+			push_error(tween_sequence.tween_steps.resource_name + "Changes to the Scale property in PhysicsBody objects may lead to unexpected results or even be overridden")
 		
 		
 		# Basic tween setup
@@ -195,15 +145,15 @@ func _compose_tween() -> void:
 		
 		
 		# Constructing the tween property
-		var tw_property = tween.tween_property(parent_object, tw_step.property_name, target_value_formatted, tween_duration * (tw_step.duration_ratio / duration_ratio_total))
+		var tw_property = tween.tween_property(parent_object, tw_step.property_name, target_value_formatted, tween_sequence.tween_duration * (tw_step.duration_ratio / duration_ratio_total))
 		
 		if is_relative:
 			tw_property.as_relative()
 		if tw_step.duration_delay > 0.0:
 			if is_relative:
-				push_error(tween_configuration.resource_name + ": TweenComposer currently doesn't support the combo of relative + parallel + delay")
+				push_error(tween_sequence.tween_steps.resource_name + ": TweenComposer currently doesn't support the combo of relative + parallel + delay")
 			else:
-				tw_property.set_delay(tween_duration * (tw_step.duration_delay / duration_ratio_total))
+				tw_property.set_delay(tween_sequence.tween_duration * (tw_step.duration_delay / duration_ratio_total))
 			
 		for trigger in tw_step.send_triggers:
 			tween.tween_callback(
@@ -217,15 +167,34 @@ func _compose_tween() -> void:
 	tween.stop()
 
 
-func load_tween(config:TweenConfigCollection) -> void:
+#region  Load Functions
+
+## Loads a new [TweenSequence] resource.
+func load_tween_sequence(new_resource: TweenSequence) -> void:
 	reset_tween()
-	tween_configuration = config
+	tween_sequence = new_resource
 	_compose_tween()
 
-
-func load_tween_and_start(config:TweenConfigCollection) -> void:
+## Loads a new [TweenSequence] resource. [br]
+## Starts the tween animation after loading.
+func load_tween_sequence_and_start(new_resource: TweenSequence) -> void:
 	reset_tween()
-	tween_configuration = config
+	tween_sequence = new_resource
+	_compose_tween()
+	play_tween()
+
+
+## Loads a new [TweenStepCollection] resource, while keeping the [TweenSequence]'s other settings intact.
+func load_tween_steps(config:TweenStepCollection) -> void:
+	reset_tween()
+	tween_sequence.tween_steps = config
+	_compose_tween()
+
+## Loads a new [TweenStepCollection] resource, while keeping the [TweenSequence]'s other settings intact. [br]
+## Starts the tween animation after loading.
+func load_tween_steps_and_start(config:TweenStepCollection) -> void:
+	reset_tween()
+	tween_sequence.tween_steps = config
 	_compose_tween()
 	play_tween()
 
@@ -290,11 +259,11 @@ func _is_tween_valid() -> bool:
 
 func _is_tween_config_valid() -> bool:
 	# Safety checks and warnings
-	if tween_configuration == null:
+	if tween_sequence.tween_steps == null:
 		push_error(str(parent_object.name) + ": TweenComposer must have a TweenConfigCollection file!")
 		return false
-	elif tween_configuration.tween_collection.size() == 0:
-		push_error(str(parent_object.name) + ": " + str(tween_configuration.resource_name) + "Configuration is empty (no tween steps set)!")
+	elif tween_sequence.tween_steps.step_collection.size() == 0:
+		push_error(str(parent_object.name) + ": " + str(tween_sequence.tween_steps.resource_name) + "Configuration is empty (no tween steps set)!")
 		return false
 	else:
 		return true
@@ -322,9 +291,9 @@ func _delete_parent_entity() -> void:
 
 
 func _on_tween_finished() -> void:
-	if persist_tween_information:
+	if tween_sequence.persist_tween_information:
 		tween.stop()
-	if delete_parent_after_tween_end:
+	if tween_sequence.delete_parent_after_tween_end:
 		_delete_parent_entity()
 
 #endregion
