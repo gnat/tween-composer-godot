@@ -14,6 +14,7 @@ A tool for creating tween animations using the inspector tab in Godot. It works 
 - Sending triggers as a signal so other nodes can be connected and interact with the tween.
 - Playback options to pause/play, reset, restart...
 - "Hide before" and "Delete after" tween, to simplify the parent's spawning/destroying animations.
+- Load your TweenSequence saved resources to play different animations.
 
 ## How to Use
 Tween Composer works with `Node2D`, `Node3D` and `Control` nodes, but it can be used in virtually any node that needs tweens.
@@ -30,9 +31,9 @@ Tween Composer uses two resources to work:
 You can find Tween Composer in the Asset Library inside Godot.
 
 You can also:
-- Create a addons folder on your Godot project
-- Add the tween_composer folder inside it.
-- Enable the plugin in `Project Settings...` and `Plugins` tab
+1. Download the latest version under "Releases"
+1. Unzip the file on your Godot project's root folder
+1. Enable the plugin in `Project Settings...` and `Plugins` tab
 
 ## Improvements / Future features
 A couple of ideas to expand TweenComposer in the future:
