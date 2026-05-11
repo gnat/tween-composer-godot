@@ -1,3 +1,4 @@
+@tool
 @icon("uid://dwgblxlt6mirn")
 class_name TweenComposer
 extends Node
@@ -25,7 +26,6 @@ signal trigger_fired(trigger_name)
 ## The [TweenSequence] resource that will be used for composing each step of the tween.
 @export var tween_sequence: TweenSequence
 
-
 ## Triggers the tween as it enters the scene.
 @export var autostart: bool = true
 
@@ -33,6 +33,27 @@ signal trigger_fired(trigger_name)
 @export var autostart_delay: float = 0.0:
 	set(value):
 		autostart_delay = max(0.0, value) # Blocks negative numbers
+
+
+@export_subgroup("Preview")
+
+## Toggle this on to preview the animation on the editor.
+## BUG: Known issue: Saving the scene while preview is running will alter the values of the parent entity!
+@export var preview: bool = false:
+	set(value):
+		preview = value
+		
+		if preview == true:
+			if tween_sequence.tween_steps != null:
+				_compose_tween()
+				play_tween()
+			else:
+				push_warning(tween_sequence.sequence_name + ": Can't preview tween, no steps set.")
+		if preview == false:
+			reset_tween()
+			_kill_tween()
+		
+		notify_property_list_changed()
 
 
 @export_group("Parent settings")
@@ -45,6 +66,7 @@ signal trigger_fired(trigger_name)
 ## The tween is considered "finished" after all loops have played (therefore if [loop_repetitions] 
 ## is set to zero, the animation will never end.
 @export var delete_parent_after_tween_end:bool = false
+
 
 @export_group("Other settings")
 
@@ -69,20 +91,33 @@ var _initial_values: Dictionary
 
 
 func _ready() -> void:
+	
 	# Get parent
 	parent_object = get_parent()
+	
+	# Stop function if code is running in the editor
+	if Engine.is_editor_hint():
+		return
 	
 	if hide_parent_before_tween_start:
 		_hide_parent()
 	
 	# Compose the tween loop
-	if tween_sequence.tween_steps != null:
+	if tween_sequence != null and tween_sequence.tween_steps != null:
 		_compose_tween()
 		if autostart:
 			if autostart_delay > 0.0:
 				await get_tree().create_timer(autostart_delay).timeout
 			_show_parent()
 			play_tween()
+
+# Cleaning up the tween
+func _exit_tree() -> void:
+	# Reset the tween original values if leaving editor
+	if Engine.is_editor_hint():
+		reset_tween()
+	# Ensure tween is killed to prevent leaks
+	_kill_tween()
 
 
 #region Compose
@@ -280,12 +315,10 @@ func _kill_tween() -> void:
 ## Checks if the tween in the TweenComposer is valid. Returns a warning if false.
 func _is_tween_valid() -> bool:
 	if tween == null:
-		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
 	elif tween.is_valid():
 		return true
 	else:
-		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
 
 func _is_tween_config_valid() -> bool:
@@ -322,9 +355,16 @@ func _delete_parent_entity() -> void:
 
 
 func _on_tween_finished() -> void:
-	if tween_sequence.persist_tween_information:
+	# End preview if running on editor.
+	if Engine.is_editor_hint():
+		preview = false
+		return
+	elif tween_sequence.persist_tween_information:
 		tween.stop()
-	if tween_sequence.delete_parent_after_tween_end:
+	elif delete_parent_after_tween_end:
 		_delete_parent_entity()
 
 #endregion
+
+
+#region Editor functions

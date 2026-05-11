@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="TweenStepCollection" format=3 uid="uid://sowj5wf00ggb"]
+
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="1_rbioc"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="2_hr7nc"]
+
+[sub_resource type="Resource" id="Resource_7d80e"]
+resource_local_to_scene = true
+resource_name = "Right"
+script = ExtResource("2_hr7nc")
+step_name = "Right"
+tween_property = 4
+property_name = "position:x"
+custom_property = "position:x"
+custom_property_type = 3
+target_value = 288.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_qtu6l"]
+resource_local_to_scene = true
+resource_name = "Scale up"
+script = ExtResource("2_hr7nc")
+step_name = "Scale up"
+tween_property = 2
+property_name = "scale"
+target_value = Vector3(0.25, 0.25, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_d0n4b"]
+resource_local_to_scene = true
+resource_name = "Left"
+script = ExtResource("2_hr7nc")
+step_name = "Left"
+tween_property = 4
+property_name = "position:x"
+custom_property = "position:x"
+custom_property_type = 3
+target_value = -288.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_3qvqb"]
+resource_local_to_scene = true
+resource_name = "Scale down"
+script = ExtResource("2_hr7nc")
+step_name = "Scale down"
+tween_property = 2
+property_name = "scale"
+target_value = Vector3(-0.25, -0.25, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[resource]
+resource_local_to_scene = true
+resource_name = "Move and Scale, non parallel"
+script = ExtResource("1_rbioc")
+tween_name = "Move and Scale, non parallel"
+step_collection = Array[ExtResource("2_hr7nc")]([SubResource("Resource_7d80e"), SubResource("Resource_qtu6l"), SubResource("Resource_d0n4b"), SubResource("Resource_3qvqb")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"

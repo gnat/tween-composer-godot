@@ -1,0 +1,189 @@
+[gd_scene format=3 uid="uid://7oont6myktf3"]
+
+[ext_resource type="FontFile" uid="uid://d2niivc3nbgut" path="res://examples/assets/font/Nunito-VariableFont_wght.ttf" id="1_jxprk"]
+[ext_resource type="LabelSettings" uid="uid://cx5bk6kp3uxpd" path="res://examples/assets/font/label_24.tres" id="2_uqgog"]
+[ext_resource type="LabelSettings" uid="uid://dc4fkqy5dr5cv" path="res://examples/assets/font/label_16.tres" id="3_wm8up"]
+[ext_resource type="Texture2D" uid="uid://ni34g8bdk5ub" path="res://examples/assets/shapes/shape_128_circle_o.png" id="4_t1lj7"]
+[ext_resource type="Script" uid="uid://bepnihd7w544x" path="res://addons/tween_composer/tween_composer.gd" id="5_caqab"]
+[ext_resource type="Script" uid="uid://daxe4s6rqjw57" path="res://addons/tween_composer/ConfigurationResources/tween_sequence_resource.gd" id="6_uqgog"]
+[ext_resource type="Texture2D" uid="uid://b08s2a47hkm1b" path="res://examples/assets/shapes/shape_128_pentagon_r_o.png" id="7_dwiof"]
+[ext_resource type="Resource" uid="uid://c1ss3ipt36apv" path="res://examples/example tweens/steps/twsteps_right_then_left.tres" id="7_wm8up"]
+[ext_resource type="Texture2D" uid="uid://134tn44ubqdt" path="res://examples/assets/shapes/shape_128_cross_25_r_o.png" id="8_aug1m"]
+[ext_resource type="Texture2D" uid="uid://cwbnr3ay5hw7t" path="res://examples/assets/shapes/shape_128_hexagon_r_o.png" id="9_t1lj7"]
+
+[sub_resource type="GDScript" id="GDScript_t1lj7"]
+script/source = "extends Control
+
+@onready var tween_composer: TweenComposer = $Sprite2D4/TweenComposer
+
+func _on_button_pressed() -> void:
+	tween_composer.play_tween()
+"
+
+[sub_resource type="FontVariation" id="FontVariation_ovd21"]
+base_font = ExtResource("1_jxprk")
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_ieo45"]
+line_spacing = 0.0
+font = SubResource("FontVariation_ovd21")
+font_size = 40
+
+[sub_resource type="Resource" id="Resource_3ig46"]
+script = ExtResource("6_uqgog")
+tween_steps = ExtResource("7_wm8up")
+tween_duration = 2.0
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
+
+[sub_resource type="Resource" id="Resource_wm8up"]
+script = ExtResource("6_uqgog")
+tween_steps = ExtResource("7_wm8up")
+tween_duration = 4.0
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
+
+[sub_resource type="Resource" id="Resource_t1lj7"]
+script = ExtResource("6_uqgog")
+tween_steps = ExtResource("7_wm8up")
+tween_duration = 2.0
+loop_repetitions = 2
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
+
+[sub_resource type="Resource" id="Resource_caqab"]
+script = ExtResource("6_uqgog")
+tween_steps = ExtResource("7_wm8up")
+loop = false
+persist_tween_information = true
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
+
+[node name="001SharedResource" type="Control" unique_id=1877161272]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_t1lj7")
+metadata/_edit_lock_ = true
+
+[node name="SizeCheck" type="ColorRect" parent="." unique_id=733821207]
+layout_mode = 0
+offset_right = 880.0
+offset_bottom = 720.0
+color = Color(0.38216856, 0.20667574, 0.24634716, 1)
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="." unique_id=391862351]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 848.0
+offset_bottom = 100.0
+text = "Tweens as resources"
+label_settings = SubResource("LabelSettings_ieo45")
+
+[node name="Description" type="Label" parent="." unique_id=805527058]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 96.0
+offset_right = 848.0
+offset_bottom = 198.0
+text = "Your tween step configurations can be saved as a resource, and reused. 
+These examples show objects sharing the same TweenStepCollection, but with different time and loop settings.
+TweenSequence resources can also be saved, and will include duration/loop information."
+label_settings = ExtResource("2_uqgog")
+autowrap_mode = 3
+
+[node name="Properties1" type="Label" parent="." unique_id=344616555]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 312.0
+offset_right = 832.0
+offset_bottom = 361.0
+text = "autostart, no delay.
+2 sec. duration, infinite loops"
+label_settings = ExtResource("3_wm8up")
+vertical_alignment = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2140211992]
+position = Vector2(96, 344)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_t1lj7")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D" unique_id=783221572]
+script = ExtResource("5_caqab")
+tween_sequence = SubResource("Resource_3ig46")
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Properties2" type="Label" parent="." unique_id=179075784]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 408.0
+offset_right = 832.0
+offset_bottom = 457.0
+text = "autostart, no delay.
+4 sec. duration, infinite loops"
+vertical_alignment = 1
+
+[node name="Sprite2D2" type="Sprite2D" parent="." unique_id=1195788050]
+position = Vector2(96, 440)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_dwiof")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D2" unique_id=1720411859]
+script = ExtResource("5_caqab")
+tween_sequence = SubResource("Resource_wm8up")
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Properties3" type="Label" parent="." unique_id=592556169]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 504.0
+offset_right = 803.0
+offset_bottom = 553.0
+text = "autostart, 4 second delay
+2 sec. duration, 2 loops"
+vertical_alignment = 1
+
+[node name="Sprite2D3" type="Sprite2D" parent="." unique_id=575466747]
+position = Vector2(96, 536)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_aug1m")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D3" unique_id=1710534339]
+script = ExtResource("5_caqab")
+tween_sequence = SubResource("Resource_t1lj7")
+autostart_delay = 4.0
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Properties4" type="Label" parent="." unique_id=1988469648]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 600.0
+offset_right = 803.0
+offset_bottom = 649.0
+text = "no autostart
+1 sec. duration, no loops"
+vertical_alignment = 1
+
+[node name="Sprite2D4" type="Sprite2D" parent="." unique_id=25941154]
+position = Vector2(96, 632)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_t1lj7")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D4" unique_id=1729629052]
+script = ExtResource("5_caqab")
+tween_sequence = SubResource("Resource_caqab")
+autostart = false
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Button" type="Button" parent="." unique_id=1754023803]
+layout_mode = 0
+offset_left = 608.0
+offset_top = 664.0
+offset_right = 706.0
+offset_bottom = 695.0
+text = "Start tween"
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://3kbm8wh3ku02"]
+
+[ext_resource type="FontFile" uid="uid://d2niivc3nbgut" path="res://examples/assets/font/Nunito-VariableFont_wght.ttf" id="1_grbrk"]
+[ext_resource type="LabelSettings" uid="uid://cx5bk6kp3uxpd" path="res://examples/assets/font/label_24.tres" id="2_3utgx"]
+[ext_resource type="Script" uid="uid://daxe4s6rqjw57" path="res://addons/tween_composer/ConfigurationResources/tween_sequence_resource.gd" id="5_1f8qi"]
+[ext_resource type="Script" uid="uid://bepnihd7w544x" path="res://addons/tween_composer/tween_composer.gd" id="5_m8ubh"]
+[ext_resource type="Resource" uid="uid://bbrnsftdgbgdu" path="res://examples/example tweens/steps/tw_steps_rotate_and_grow.tres" id="6_1memf"]
+[ext_resource type="Texture2D" uid="uid://cwbnr3ay5hw7t" path="res://examples/assets/shapes/shape_128_hexagon_r_o.png" id="9_e6w3j"]
+
+[sub_resource type="GDScript" id="GDScript_t1lj7"]
+script/source = "extends Control
+
+@onready var tween_composer: TweenComposer = $Sprite2D/TweenComposer
+
+
+func _on_play_button_pressed() -> void:
+	tween_composer.play_tween()
+
+
+func _on_pause_button_pressed() -> void:
+	tween_composer.pause_tween()
+
+
+func _on_restart_button_pressed() -> void:
+	tween_composer.restart_tween()
+
+
+func _on_reset_button_pressed() -> void:
+	tween_composer.reset_tween()
+
+
+func _on_stop_button_pressed() -> void:
+	tween_composer.stop_tween()
+"
+
+[sub_resource type="FontVariation" id="FontVariation_ovd21"]
+base_font = ExtResource("1_grbrk")
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_ieo45"]
+line_spacing = 0.0
+font = SubResource("FontVariation_ovd21")
+font_size = 40
+
+[sub_resource type="Resource" id="Resource_mfude"]
+script = ExtResource("5_1f8qi")
+tween_steps = ExtResource("6_1memf")
+tween_duration = 2.0
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
+
+[node name="002PlaybackControls" type="Control" unique_id=1877161272]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_t1lj7")
+metadata/_edit_lock_ = true
+
+[node name="SizeCheck" type="ColorRect" parent="." unique_id=733821207]
+layout_mode = 0
+offset_right = 880.0
+offset_bottom = 720.0
+color = Color(0.38216856, 0.20667574, 0.24634716, 1)
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="." unique_id=391862351]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 688.0
+offset_bottom = 100.0
+text = "Playback Controls"
+label_settings = SubResource("LabelSettings_ieo45")
+
+[node name="Description" type="Label" parent="." unique_id=805527058]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 96.0
+offset_right = 688.0
+offset_bottom = 164.0
+text = "Tween Composer has some built-in playback functions to simplify how you control your animations."
+label_settings = ExtResource("2_3utgx")
+autowrap_mode = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=25941154]
+position = Vector2(443, 384)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("9_e6w3j")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D" unique_id=1729629052]
+script = ExtResource("5_m8ubh")
+tween_sequence = SubResource("Resource_mfude")
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="PlayButton" type="Button" parent="." unique_id=1754023803]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 584.0
+offset_right = 378.0
+offset_bottom = 615.0
+text = "Play"
+
+[node name="PauseButton" type="Button" parent="." unique_id=1768467538]
+layout_mode = 0
+offset_left = 392.0
+offset_top = 584.0
+offset_right = 490.0
+offset_bottom = 615.0
+text = "Pause"
+
+[node name="RestartButton" type="Button" parent="." unique_id=1346957920]
+layout_mode = 0
+offset_left = 336.0
+offset_top = 632.0
+offset_right = 434.0
+offset_bottom = 663.0
+text = "Restart"
+
+[node name="ResetButton" type="Button" parent="." unique_id=1886978931]
+layout_mode = 0
+offset_left = 448.0
+offset_top = 632.0
+offset_right = 546.0
+offset_bottom = 663.0
+text = "Reset"
+
+[node name="StopButton" type="Button" parent="." unique_id=1232064916]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 584.0
+offset_right = 602.0
+offset_bottom = 615.0
+text = "Stop"
+
+[connection signal="pressed" from="PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="PauseButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="ResetButton" to="." method="_on_reset_button_pressed"]
+[connection signal="pressed" from="StopButton" to="." method="_on_stop_button_pressed"]

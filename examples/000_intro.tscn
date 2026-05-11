@@ -1,0 +1,415 @@
+[gd_scene format=3 uid="uid://c43dneb2s7qj5"]
+
+[ext_resource type="FontFile" uid="uid://d2niivc3nbgut" path="res://examples/assets/font/Nunito-VariableFont_wght.ttf" id="1_raajm"]
+[ext_resource type="LabelSettings" uid="uid://cx5bk6kp3uxpd" path="res://examples/assets/font/label_24.tres" id="2_16pl7"]
+[ext_resource type="LabelSettings" uid="uid://dc4fkqy5dr5cv" path="res://examples/assets/font/label_16.tres" id="3_84d4k"]
+[ext_resource type="Script" uid="uid://bepnihd7w544x" path="res://addons/tween_composer/tween_composer.gd" id="5_jad8w"]
+[ext_resource type="Resource" uid="uid://d2i6gwgeqlb7h" path="res://examples/example tweens/sequences/twseq_bounce_and_rotate.tres" id="5_vhnuo"]
+[ext_resource type="Texture2D" uid="uid://b08s2a47hkm1b" path="res://examples/assets/shapes/shape_128_pentagon_r_o.png" id="7_iq14t"]
+[ext_resource type="Resource" uid="uid://ccxlta40ge7ab" path="res://examples/example tweens/sequences/twseq_ui_fade_intro_2sec.tres" id="7_wiyhq"]
+
+[sub_resource type="FontVariation" id="FontVariation_ovd21"]
+base_font = ExtResource("1_raajm")
+variation_opentype = {
+2003265652: 700
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_ieo45"]
+line_spacing = 0.0
+font = SubResource("FontVariation_ovd21")
+font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wiyhq"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.48629558, 0.686606, 0.75650036, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[sub_resource type="FontVariation" id="FontVariation_wiyhq"]
+base_font = ExtResource("1_raajm")
+variation_opentype = {
+2003265652: 600
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_5rk1r"]
+font = SubResource("FontVariation_wiyhq")
+font_color = Color(0.051775992, 0.28960148, 0.23812196, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5rk1r"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhnuo"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.7874336, 0.85270435, 0.8488328, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+expand_margin_left = 8.0
+expand_margin_right = 8.0
+
+[node name="000Intro" type="Control" unique_id=1877161272]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="SizeCheck" type="ColorRect" parent="." unique_id=733821207]
+layout_mode = 0
+offset_right = 880.0
+offset_bottom = 720.0
+color = Color(0.38216856, 0.20667574, 0.24634716, 1)
+metadata/_edit_lock_ = true
+
+[node name="Title" type="Label" parent="." unique_id=391862351]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 848.0
+offset_bottom = 100.0
+text = "Tween Composer"
+label_settings = SubResource("LabelSettings_ieo45")
+
+[node name="Description" type="Label" parent="." unique_id=805527058]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 96.0
+offset_right = 848.0
+offset_bottom = 164.0
+text = "Tween Composer allows you to use the inspector to create your animations, and save them as reusable resources."
+label_settings = ExtResource("2_16pl7")
+autowrap_mode = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2140211992]
+position = Vector2(96, 240)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_iq14t")
+
+[node name="TweenComposer" type="Node" parent="Sprite2D" unique_id=783221572]
+script = ExtResource("5_jad8w")
+tween_sequence = ExtResource("5_vhnuo")
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Terminology" type="Label" parent="." unique_id=1373993509]
+layout_mode = 0
+offset_left = 192.0
+offset_top = 208.0
+offset_right = 832.0
+offset_bottom = 242.0
+text = "Terminology:"
+label_settings = ExtResource("2_16pl7")
+autowrap_mode = 3
+
+[node name="TweenComposer" type="Node" parent="Terminology" unique_id=470068797]
+script = ExtResource("5_jad8w")
+tween_sequence = ExtResource("7_wiyhq")
+autostart_delay = 1.0
+hide_parent_before_tween_start = true
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="TweenParts" type="Control" parent="." unique_id=1942548096]
+anchors_preset = 0
+offset_left = 192.0
+offset_top = 272.0
+offset_right = 232.0
+offset_bottom = 312.0
+
+[node name="TweenComposer" type="Node" parent="TweenParts" unique_id=809679500]
+script = ExtResource("5_jad8w")
+tween_sequence = ExtResource("7_wiyhq")
+autostart_delay = 2.0
+hide_parent_before_tween_start = true
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="1" type="PanelContainer" parent="TweenParts" unique_id=1364332111]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 184.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wiyhq")
+
+[node name="Label" type="Label" parent="TweenParts/1" unique_id=213033299]
+layout_mode = 2
+text = "Bounce and Rotate"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="2" type="PanelContainer" parent="TweenParts" unique_id=47393726]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 72.0
+offset_right = 184.0
+offset_bottom = 112.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wiyhq")
+
+[node name="Label" type="Label" parent="TweenParts/2" unique_id=707037964]
+layout_mode = 2
+text = "Fall down"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="3" type="PanelContainer" parent="TweenParts" unique_id=1715387866]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 120.0
+offset_right = 184.0
+offset_bottom = 160.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wiyhq")
+
+[node name="Label" type="Label" parent="TweenParts/3" unique_id=47384783]
+layout_mode = 2
+text = "Rotate (parallel)"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="4" type="PanelContainer" parent="TweenParts" unique_id=740855334]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 168.0
+offset_right = 184.0
+offset_bottom = 208.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wiyhq")
+
+[node name="Label" type="Label" parent="TweenParts/4" unique_id=1206021137]
+layout_mode = 2
+text = "Bounce up"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="5" type="PanelContainer" parent="TweenParts" unique_id=229917472]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 216.0
+offset_right = 184.0
+offset_bottom = 256.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_wiyhq")
+
+[node name="Label" type="Label" parent="TweenParts/5" unique_id=383393039]
+layout_mode = 2
+text = "Rotate (parallel)"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="TweenParts" unique_id=780156796]
+layout_mode = 0
+offset_right = 176.0
+offset_bottom = 24.0
+text = "Step Collection"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="TweenParts" unique_id=888287182]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 40.0
+offset_bottom = 104.0
+text = "Step"
+label_settings = ExtResource("3_84d4k")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label6" type="Label" parent="TweenParts" unique_id=62320792]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 104.0
+offset_right = 288.0
+offset_bottom = 128.0
+text = "Section"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="TweenParts" unique_id=1838664869]
+layout_mode = 0
+offset_top = 128.0
+offset_right = 40.0
+offset_bottom = 152.0
+text = "Step"
+label_settings = ExtResource("3_84d4k")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="TweenParts" unique_id=1398129328]
+layout_mode = 0
+offset_top = 176.0
+offset_right = 40.0
+offset_bottom = 200.0
+text = "Step"
+label_settings = ExtResource("3_84d4k")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="TweenParts" unique_id=1014853039]
+layout_mode = 0
+offset_top = 224.0
+offset_right = 40.0
+offset_bottom = 248.0
+text = "Step"
+label_settings = ExtResource("3_84d4k")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="TweenParts" unique_id=1118656885]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 72.0
+offset_right = 224.0
+offset_bottom = 160.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5rk1r")
+
+[node name="Label7" type="Label" parent="TweenParts" unique_id=554529916]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 200.0
+offset_right = 288.0
+offset_bottom = 224.0
+text = "Section"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="Panel2" type="Panel" parent="TweenParts" unique_id=273537175]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 168.0
+offset_right = 224.0
+offset_bottom = 256.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_5rk1r")
+
+[node name="DurationSettings" type="Control" parent="." unique_id=1245265863]
+anchors_preset = 0
+offset_left = 192.0
+offset_top = 568.0
+offset_right = 232.0
+offset_bottom = 608.0
+
+[node name="TweenComposer" type="Node" parent="DurationSettings" unique_id=1877023451]
+script = ExtResource("5_jad8w")
+tween_sequence = ExtResource("7_wiyhq")
+autostart_delay = 3.0
+hide_parent_before_tween_start = true
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Label8" type="Label" parent="DurationSettings" unique_id=1361885974]
+layout_mode = 0
+offset_right = 176.0
+offset_bottom = 24.0
+text = "Duration Settings"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="6" type="PanelContainer" parent="DurationSettings" unique_id=1034996277]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 24.0
+offset_right = 168.0
+offset_bottom = 64.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vhnuo")
+
+[node name="Label" type="Label" parent="DurationSettings/6" unique_id=39171789]
+layout_mode = 2
+text = "2.0s duration"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="7" type="PanelContainer" parent="DurationSettings" unique_id=83594489]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 72.0
+offset_right = 168.0
+offset_bottom = 112.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vhnuo")
+
+[node name="Label" type="Label" parent="DurationSettings/7" unique_id=74851643]
+layout_mode = 2
+text = "Loop (infinite)"
+label_settings = SubResource("LabelSettings_5rk1r")
+horizontal_alignment = 1
+
+[node name="Terms" type="Control" parent="." unique_id=2117399818]
+anchors_preset = 0
+offset_left = 520.0
+offset_top = 320.0
+offset_right = 560.0
+offset_bottom = 360.0
+
+[node name="TweenComposer" type="Node" parent="Terms" unique_id=637887669]
+script = ExtResource("5_jad8w")
+tween_sequence = ExtResource("7_wiyhq")
+autostart_delay = 4.0
+hide_parent_before_tween_start = true
+metadata/_custom_type_script = "uid://bepnihd7w544x"
+
+[node name="Info1" type="Label" parent="Terms" unique_id=1720946163]
+layout_mode = 0
+offset_right = 305.0
+offset_bottom = 75.0
+text = "Tween Sequence:
+Step Collection + duration/loops settings
+Can be saved as a resource"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="Info2" type="Label" parent="Terms" unique_id=344616555]
+layout_mode = 0
+offset_top = 96.0
+offset_right = 224.0
+offset_bottom = 171.0
+text = "Step Collection:
+A collection of tween steps.
+Can be saved as a resource"
+label_settings = ExtResource("3_84d4k")
+vertical_alignment = 1
+
+[node name="Info3" type="Label" parent="Terms" unique_id=179075784]
+layout_mode = 0
+offset_top = 192.0
+offset_right = 258.0
+offset_bottom = 267.0
+text = "Tween Step:
+A single instruction in  the tween,
+transforming a specfic property."
+vertical_alignment = 1
+
+[node name="Info4" type="Label" parent="Terms" unique_id=592556169]
+layout_mode = 0
+offset_top = 288.0
+offset_right = 258.0
+offset_bottom = 363.0
+text = "Tween Section:
+A group of steps that are parallel,
+starting at the same time."
+vertical_alignment = 1

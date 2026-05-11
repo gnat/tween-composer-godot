@@ -1,0 +1,70 @@
+[gd_resource type="Resource" script_class="TweenSequence" format=3 uid="uid://d2i6gwgeqlb7h"]
+
+[ext_resource type="Script" uid="uid://daxe4s6rqjw57" path="res://addons/tween_composer/ConfigurationResources/tween_sequence_resource.gd" id="1_omb7m"]
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="2_bsmky"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="3_p8hm7"]
+
+[sub_resource type="Resource" id="Resource_5rk1r"]
+resource_local_to_scene = true
+resource_name = "Fall down"
+script = ExtResource("3_p8hm7")
+step_name = "Fall down"
+tween_property = 4
+property_name = "position:y"
+custom_property = "position:y"
+custom_property_type = 3
+target_value = 408.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_4ohxq"]
+resource_local_to_scene = true
+resource_name = "Rotate (parallel)"
+script = ExtResource("3_p8hm7")
+step_name = "Rotate (parallel)"
+transition = 0
+parallel = true
+tween_property = 1
+property_name = "rotation_degrees"
+target_value = Vector3(72, 0, 0)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_raajm"]
+resource_local_to_scene = true
+resource_name = "Bounce up"
+script = ExtResource("3_p8hm7")
+step_name = "Bounce up"
+easing = 1
+tween_property = 4
+property_name = "position:y"
+custom_property = "position:y"
+custom_property_type = 3
+target_value = -408.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_jad8w"]
+resource_local_to_scene = true
+resource_name = "Rotate (parallel)"
+script = ExtResource("3_p8hm7")
+step_name = "Rotate (parallel)"
+transition = 0
+parallel = true
+tween_property = 1
+property_name = "rotation_degrees"
+target_value = Vector3(72, 0, 0)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_16pl7"]
+resource_local_to_scene = true
+resource_name = "Bounce+Rotate"
+script = ExtResource("2_bsmky")
+tween_name = "Bounce+Rotate"
+step_collection = Array[ExtResource("3_p8hm7")]([SubResource("Resource_5rk1r"), SubResource("Resource_4ohxq"), SubResource("Resource_raajm"), SubResource("Resource_jad8w")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"
+
+[resource]
+resource_name = "Bounce and Rotate"
+script = ExtResource("1_omb7m")
+sequence_name = "Bounce and Rotate"
+tween_steps = SubResource("Resource_16pl7")
+tween_duration = 2.0
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"
