@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TweenSequence" format=3 uid="uid://ccxlta40ge7ab"]
+
+[ext_resource type="Script" uid="uid://daxe4s6rqjw57" path="res://addons/tween_composer/ConfigurationResources/tween_sequence_resource.gd" id="1_reu54"]
+[ext_resource type="Resource" uid="uid://g6wdpi1ardvj" path="res://examples/example tweens/steps/twsteps_ui_fade_intro.tres" id="2_vb0w8"]
+
+[resource]
+resource_name = "UI fade intro"
+script = ExtResource("1_reu54")
+sequence_name = "UI fade intro"
+tween_steps = ExtResource("2_vb0w8")
+tween_duration = 2.0
+loop = false
+metadata/_custom_type_script = "uid://daxe4s6rqjw57"

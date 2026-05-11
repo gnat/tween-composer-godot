@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="TweenStepCollection" format=3 uid="uid://g6wdpi1ardvj"]
+
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="1_miuvx"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="2_6lunv"]
+
+[sub_resource type="Resource" id="Resource_16pl7"]
+resource_local_to_scene = true
+resource_name = "Alpha 0%"
+script = ExtResource("2_6lunv")
+step_name = "Alpha 0%"
+transition = 0
+duration_ratio = 0.0
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(1, 1, 1, 0)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_84d4k"]
+resource_local_to_scene = true
+script = ExtResource("2_6lunv")
+transition = 1
+easing = 1
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[resource]
+resource_local_to_scene = true
+resource_name = "UI fade intro"
+script = ExtResource("1_miuvx")
+tween_name = "UI fade intro"
+step_collection = Array[ExtResource("2_6lunv")]([SubResource("Resource_16pl7"), SubResource("Resource_84d4k")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"

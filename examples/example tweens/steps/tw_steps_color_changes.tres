@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="TweenStepCollection" format=3 uid="uid://cpgaouh2qm2r6"]
+
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="1_k0oi6"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="2_37dm7"]
+
+[sub_resource type="Resource" id="Resource_xunc4"]
+resource_local_to_scene = true
+resource_name = "Red!"
+script = ExtResource("2_37dm7")
+step_name = "Red!"
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(0.99999624, 0.19624946, 0.2679089, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_c5rgr"]
+resource_local_to_scene = true
+resource_name = "Blue!"
+script = ExtResource("2_37dm7")
+step_name = "Blue!"
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(0.19849586, 0.61246556, 0.73607534, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_21i5m"]
+resource_local_to_scene = true
+resource_name = "Green!"
+script = ExtResource("2_37dm7")
+step_name = "Green!"
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(0.1792, 0.56, 0.19823998, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_dxq1e"]
+resource_local_to_scene = true
+resource_name = "White again!"
+script = ExtResource("2_37dm7")
+step_name = "White again!"
+relative_value = false
+tween_property = 3
+property_name = "modulate"
+target_value = Color(1, 1, 1, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[resource]
+resource_local_to_scene = true
+resource_name = "Color changes"
+script = ExtResource("1_k0oi6")
+tween_name = "Color changes"
+step_collection = Array[ExtResource("2_37dm7")]([SubResource("Resource_xunc4"), SubResource("Resource_c5rgr"), SubResource("Resource_21i5m"), SubResource("Resource_dxq1e")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"

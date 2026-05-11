@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="TweenStepCollection" format=3 uid="uid://c1ss3ipt36apv"]
+
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="1_p6w2u"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="2_fltn1"]
+
+[sub_resource type="Resource" id="Resource_yp7ih"]
+resource_local_to_scene = true
+resource_name = "Right"
+script = ExtResource("2_fltn1")
+step_name = "Right"
+transition = 1
+easing = 2
+tween_property = 4
+property_name = "position:x"
+custom_property = "position:x"
+custom_property_type = 3
+target_value = 440.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_dwiof"]
+resource_local_to_scene = true
+resource_name = "Left"
+script = ExtResource("2_fltn1")
+step_name = "Left"
+transition = 1
+easing = 2
+tween_property = 4
+property_name = "position:x"
+custom_property = "position:x"
+custom_property_type = 3
+target_value = -440.0
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[resource]
+resource_local_to_scene = true
+resource_name = "Right then Left"
+script = ExtResource("1_p6w2u")
+tween_name = "Right then Left"
+step_collection = Array[ExtResource("2_fltn1")]([SubResource("Resource_yp7ih"), SubResource("Resource_dwiof")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"

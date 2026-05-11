@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="TweenStepCollection" format=3 uid="uid://bbrnsftdgbgdu"]
+
+[ext_resource type="Script" uid="uid://b2cnshkmciixf" path="res://addons/tween_composer/ConfigurationResources/tween_step_collection_resource.gd" id="1_lkikn"]
+[ext_resource type="Script" uid="uid://bq7aba2n0qrym" path="res://addons/tween_composer/ConfigurationResources/tween_step_item_resource.gd" id="2_qymlf"]
+
+[sub_resource type="Resource" id="Resource_kgv1h"]
+resource_local_to_scene = true
+resource_name = "Rotate"
+script = ExtResource("2_qymlf")
+step_name = "Rotate"
+transition = 10
+easing = 2
+tween_property = 1
+property_name = "rotation_degrees"
+target_value = Vector3(60, 0, 0)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[sub_resource type="Resource" id="Resource_grbrk"]
+resource_local_to_scene = true
+resource_name = "Grow"
+script = ExtResource("2_qymlf")
+step_name = "Grow"
+transition = 11
+easing = 1
+duration_ratio = 0.25
+tween_property = 2
+property_name = "scale"
+target_value = Vector3(0.25, 0.25, 1)
+metadata/_custom_type_script = "uid://bq7aba2n0qrym"
+
+[resource]
+resource_local_to_scene = true
+resource_name = "Rotate and Grow"
+script = ExtResource("1_lkikn")
+tween_name = "Rotate and Grow"
+step_collection = Array[ExtResource("2_qymlf")]([SubResource("Resource_kgv1h"), SubResource("Resource_grbrk")])
+metadata/_custom_type_script = "uid://b2cnshkmciixf"

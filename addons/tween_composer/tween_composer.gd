@@ -103,7 +103,7 @@ func _ready() -> void:
 		_hide_parent()
 	
 	# Compose the tween loop
-	if tween_sequence.tween_steps != null:
+	if tween_sequence != null and tween_sequence.tween_steps != null:
 		_compose_tween()
 		if autostart:
 			if autostart_delay > 0.0:
@@ -315,12 +315,10 @@ func _kill_tween() -> void:
 ## Checks if the tween in the TweenComposer is valid. Returns a warning if false.
 func _is_tween_valid() -> bool:
 	if tween == null:
-		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
 	elif tween.is_valid():
 		return true
 	else:
-		push_warning(str(parent_object.name) + ": TweenComposer doesn't have an active tween.")
 		return false
 
 func _is_tween_config_valid() -> bool:
