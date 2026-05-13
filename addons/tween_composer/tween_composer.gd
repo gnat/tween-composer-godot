@@ -104,14 +104,19 @@ func _ready() -> void:
 	
 	# Compose the tween loop
 	if tween_sequence != null and tween_sequence.tween_steps != null:
-		_compose_tween()
-		if autostart:
-			if autostart_delay > 0.0:
-				await get_tree().create_timer(autostart_delay).timeout
-			_show_parent()
-			play_tween()
+		call_deferred("_compose_tween_at_ready")
 
-# Cleaning up the tween
+
+func _compose_tween_at_ready() -> void:
+	_compose_tween()
+	if autostart:
+		if autostart_delay > 0.0:
+			await get_tree().create_timer(autostart_delay).timeout
+		_show_parent()
+		play_tween()
+
+
+# Cleaning up the tween on delete
 func _exit_tree() -> void:
 	# Reset the tween original values if leaving editor
 	if Engine.is_editor_hint():
