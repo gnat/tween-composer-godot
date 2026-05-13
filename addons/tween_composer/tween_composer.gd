@@ -102,11 +102,14 @@ func _ready() -> void:
 	if hide_parent_before_tween_start:
 		_hide_parent()
 	
-	# Compose the tween loop
+	# Compose the tween loop.
 	if tween_sequence != null and tween_sequence.tween_steps != null:
 		call_deferred("_compose_tween_at_ready")
+	else:
+		return
 
-
+## Composes the tween and sets the autostart. Used only in [method _ready], as a deferred call 
+## to ensure autostart_delay can be set externally in the tree.
 func _compose_tween_at_ready() -> void:
 	_compose_tween()
 	if autostart:
@@ -127,6 +130,8 @@ func _exit_tree() -> void:
 
 #region Compose
 
+## The main function of Tween Composer. Iterates through all the configuration resources to compose 
+## the tween animation. Will not play the animation at the end (use [method play_tween] to do so).
 func _compose_tween() -> void:
 	
 	_is_tween_config_valid()
@@ -238,7 +243,7 @@ func _compose_tween() -> void:
 	tween.stop()
 
 
-#region  Load Functions
+#region Load Functions
 
 ## Loads a new [TweenSequence] resource.
 func load_tween_sequence(new_resource: TweenSequence) -> void:
