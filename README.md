@@ -9,12 +9,13 @@ A tool for creating tween animations using the inspector tab in Godot. It works 
 
 ## Features
 
-- Tween configurations can be saved as resources and reused in different entities.
-- Dropdown for basic properties (position, rotation, scale, color/opacity), plus an "Other" field for changing a custom property (using property paths, e.g. `position:x`).
-- Sending triggers as a signal so other nodes can be connected and interact with the tween.
-- Playback options to pause/play, reset, restart...
+- Tweens can be saved as resources and reused in different entities.
+- Dropdown for basic properties (position, rotation, scale, color/opacity), plus an "Other" field for changing ANY property using property paths, e.g. `position:x`.
+- Sending triggers as a signal so other nodes can be connected and interact with the tween. Fire that particle mid-tween!
+- Playback options to pause/play, reset or restart.
 - "Hide before" and "Delete after" tween, to simplify the parent's spawning/destroying animations.
-- Load your TweenSequence saved resources to play different animations.
+- Load your tween resources to play different animations.
+- Use expressions for random values, or to get values from variables.
 - Preview the tween directly in the editor!
 
 ## How to Use
