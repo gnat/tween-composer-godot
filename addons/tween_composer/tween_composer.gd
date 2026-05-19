@@ -12,7 +12,6 @@ extends Node
 ## or to load different animations into the same one.
 ## [br][br]
 ##
-## TODO: Preview in editor: Now that reset_tween is done, this should be doable.
 ## BUG: Known issue: Parallel and delayed tween property if it is a relative as well (currently throws an error to warn the user)
 ## 
 
@@ -139,6 +138,7 @@ func _compose_tween() -> void:
 	
 	var tw_steps = tween_sequence.tween_steps.step_collection
 
+
 	# Calculate the duration of tween(s)
 	
 	## The sum of all duration ratios of non-parallel steps. Used to calculate the different timing of each step in the tween animation.
@@ -154,6 +154,7 @@ func _compose_tween() -> void:
 		if tw_step.parallel == false:
 			duration_ratio_total += tw_step.duration_ratio
 	
+	
 	# Crash prevention if all steps are parallel (or all their ratios are 0)
 	if duration_ratio_total <= 0:
 		push_warning(tween_sequence.tween_steps.resource_name + ": Total duration ratio = 0. Using 1.0 to avoid division by zero. It's likely that all steps are set to parallel.")
@@ -164,6 +165,7 @@ func _compose_tween() -> void:
 	if tween:
 		tween.kill()
 	_initial_values = {}
+	
 	
 	# Initial setup of tween parameters
 	tween = create_tween()
@@ -181,7 +183,7 @@ func _compose_tween() -> void:
 	
 	
 	# Creating the tweens by getting values from tween array.
-	# (The big FOR loop starts here)
+	# (The big loop starts here)
 	for tw_step in tw_steps:
 		
 		if !tw_step.active:
@@ -198,7 +200,6 @@ func _compose_tween() -> void:
 		elif (parent_object is CollisionObject2D or parent_object is CollisionObject3D) and tw_step.tween_property == tw_step.TweenOptions.SCALE:
 			push_error(tween_sequence.tween_steps.resource_name + ": Changes to the Scale property in PhysicsBody objects may lead to unexpected results or even be overridden")
 		
-		
 		# Basic tween setup
 		tween.set_trans(tw_step.transition)
 		tween.set_ease(tw_step.easing)
@@ -208,22 +209,26 @@ func _compose_tween() -> void:
 		if tw_step.relative_value == true:
 			is_relative = true
 		
+		# Getting proper values from either simple values or expressions:
+		var target_value_formatted: Variant
+		match  tw_step.value_source:
+			TweenStepItem.ValueSource.VALUE:
+				target_value_formatted = tw_step.target_value
+			TweenStepItem.ValueSource.EXPRESSION:
+				target_value_formatted = _resolve_expression(tw_step)
 		
-		# Formatting the values depending on parent Node type and property tweened
-		var target_value_formatted = tw_step.target_value
-		
+		# Formatting the value depending on parent Node type and property tweened
 		if parent_object is Node2D or parent_object is Control:
 			# Only get 1 rotation axis if 2D
-			if tw_step.tween_property == tw_step.TweenOptions.ROTATION:
+			if tw_step.tween_property == tw_step.TweenOptions.ROTATION and target_value_formatted is Vector3:
 				target_value_formatted = target_value_formatted.x
 			# Transform  Vector3 to Vector2 if 2D
-			elif tw_step.tween_property == tw_step.TweenOptions.POSITION or (tw_step.tween_property == tw_step.TweenOptions.SCALE and target_value_formatted is Vector3):
+			elif (tw_step.tween_property == tw_step.TweenOptions.POSITION or tw_step.tween_property == tw_step.TweenOptions.SCALE) and target_value_formatted is Vector3:
 				target_value_formatted = Vector2(target_value_formatted.x, target_value_formatted.y)
 		
 		
 		# Constructing the tween property
 		var tw_property = tween.tween_property(parent_object, tw_step.property_name, target_value_formatted, tween_sequence.tween_duration * (tw_step.duration_ratio / duration_ratio_total))
-		
 		if is_relative:
 			tw_property.as_relative()
 		if tw_step.duration_delay > 0.0:
@@ -343,6 +348,24 @@ func _is_tween_config_valid() -> bool:
 	else:
 		return true
 
+func _resolve_expression(tw_step: TweenStepItem) -> Variant:
+	var text: String = tw_step.expression_text
+	
+	if text.is_empty():
+		push_error(tween_sequence.tween_steps.resource_name + " / " + tw_step.step_name + ": Expression is empty!")
+		return tw_step.target_value # Fallback to default target value in step
+	
+	var expression: Expression = Expression.new()
+	expression.parse(text, ["parent", "initial"])
+	
+	var result: Variant = expression.execute([parent_object, _initial_values])
+	if expression.has_execute_failed():
+		push_error(tween_sequence.tween_steps.resource_name + " / " + tw_step.step_name + ": Expression execution failed!")
+		return tw_step.target_value # Fallback to default target value in step
+	
+	return result
+
+
 
 func _hide_parent() -> void:
 	# INFO: Toggling "visible" in Control nodes can mess with the UI position, so the solution was to "turn invisible" instead.
@@ -376,6 +399,3 @@ func _on_tween_finished() -> void:
 		_delete_parent_entity()
 
 #endregion
-
-
-#region Editor functions
