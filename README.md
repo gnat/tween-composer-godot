@@ -6,6 +6,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 A tool for creating tween animations using the inspector tab in Godot. It works on 2D, 3D and UI objects!
+
 Works with Godot 4.4+
 
 Head to the itch.io page for more updates: https://gurbsgurbs.itch.io/tween-composer
