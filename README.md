@@ -6,6 +6,9 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 A tool for creating tween animations using the inspector tab in Godot. It works on 2D, 3D and UI objects!
+Works with Godot 4.4+
+
+Head to the itch.io page for more updates: https://gurbsgurbs.itch.io/tween-composer
 
 ## Features
 
@@ -40,6 +43,3 @@ You can also:
 ## Improvements / Future features
 A couple of ideas to expand TweenComposer in the future:
 - Implement tween_callback() and tween_method(), somehow.
-- Using variables or random as property values, to make dynamic animations.
-
-Head to the itch.io page for more updates: https://gurbsgurbs.itch.io/tween-composer
