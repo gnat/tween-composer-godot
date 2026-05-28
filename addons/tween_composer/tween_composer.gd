@@ -188,7 +188,9 @@ func _compose_tween() -> void:
 		
 		if !tw_step.active:
 			continue
-		
+		if !parent_object:
+			continue
+
 		# Saving initial value of property to _initial_values dictionary
 		if _initial_values.has(tw_step.property_name) == false: # Avoid duplicates, only get first value
 			_initial_values[tw_step.property_name] = parent_object.get_indexed(tw_step.property_name)
@@ -377,6 +379,8 @@ func _hide_parent() -> void:
 
 func _show_parent() -> void:
 	# INFO: Toggling "visible" in Control nodes can mess with the UI position, so the solution was to "turn invisible" instead.
+	if !parent_object:
+		return
 	if parent_object is Control:
 		parent_object.modulate = Color(1.0, 1.0, 1.0, 1.0)
 	else:
