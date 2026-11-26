@@ -205,6 +205,8 @@ func _compose_tween() -> void:
 		
 		if !tw_step.active:
 			continue
+		if !parent_object:
+			continue
 		
 		# Warnings:
 		if parent_object is Node3D and tw_step.tween_property == tw_step.TweenOptions.MODULATE:
@@ -412,6 +414,8 @@ func _hide_parent() -> void:
 
 
 func _show_parent() -> void:
+	if !parent_object:
+		return
 	if _is_parent_hidden_by_composer == false:
 		return
 	if parent_object is Control:
